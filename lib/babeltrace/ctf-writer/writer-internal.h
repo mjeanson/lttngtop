@@ -4,7 +4,7 @@
 /*
  * BabelTrace - CTF Writer: Writer internal
  *
- * Copyright 2013, 2014 Jérémie Galarneau <jeremie.galarneau@efficios.com>
+ * Copyright 2013 EfficiOS Inc.
  *
  * Author: Jérémie Galarneau <jeremie.galarneau@efficios.com>
  *
@@ -61,7 +61,7 @@ struct bt_ctf_writer {
 	GPtrArray *streams; /* Array of pointers to bt_ctf_stream */
 	struct bt_ctf_field_type *trace_packet_header_type;
 	struct bt_ctf_field *trace_packet_header;
-	uint64_t next_stream_id;
+	uint32_t next_stream_id;
 };
 
 struct environment_variable {

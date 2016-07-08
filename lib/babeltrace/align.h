@@ -27,7 +27,7 @@
 
 #include <babeltrace/compiler.h>
 #include <unistd.h>
-#include <babeltrace/compat/limits.h>
+#include <limits.h>
 
 #ifndef PAGE_SIZE		/* Cygwin limits.h defines its own PAGE_SIZE */
 #define PAGE_SIZE		sysconf(_SC_PAGE_SIZE)
@@ -76,7 +76,7 @@
 	({								       \
 		MAYBE_BUILD_BUG_ON((alignment) == 0			       \
 				   || ((alignment) & ((alignment) - 1)));      \
-		(((align_drift) - (alignment)) & ((alignment) - 1);	       \
+		(((align_drift) - (alignment)) & ((alignment) - 1));	       \
 	})
 
 #endif /* _BABELTRACE_ALIGN_H */

@@ -4,7 +4,7 @@
 /*
  * BabelTrace - CTF Writer: Writer
  *
- * Copyright 2013, 2014 Jérémie Galarneau <jeremie.galarneau@efficios.com>
+ * Copyright 2013 EfficiOS Inc.
  *
  * Author: Jérémie Galarneau <jeremie.galarneau@efficios.com>
  *
@@ -30,8 +30,6 @@
  * http://www.efficios.com/ctf
  */
 
-#include <babeltrace/ctf-ir/event-types.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -40,6 +38,13 @@ struct bt_ctf_writer;
 struct bt_ctf_stream;
 struct bt_ctf_stream_class;
 struct bt_ctf_clock;
+
+enum bt_ctf_byte_order {
+	BT_CTF_BYTE_ORDER_NATIVE = 0,
+	BT_CTF_BYTE_ORDER_LITTLE_ENDIAN,
+	BT_CTF_BYTE_ORDER_BIG_ENDIAN,
+	BT_CTF_BYTE_ORDER_NETWORK,
+};
 
 /*
  * bt_ctf_writer_create: create a writer instance.
@@ -62,7 +67,7 @@ extern struct bt_ctf_writer *bt_ctf_writer_create(const char *path);
  * @param writer Writer instance.
  * @param stream_class Stream class to instantiate.
  *
- * Returns an allocated writer on success, NULL on error.
+ * Returns an allocated stream on success, NULL on error.
  */
 extern struct bt_ctf_stream *bt_ctf_writer_create_stream(
 		struct bt_ctf_writer *writer,

@@ -6,4 +6,5 @@ SUBDIRS = src doc utils
 
 dist_doc_DATA = LICENSE \
 		ChangeLog \
-		README
+		README \
+		README-LIVE

@@ -74,6 +74,8 @@ struct ctf_stream_definition {
 
 	/* Event discarded information */
 	uint64_t events_discarded;
+	/* Trace packets lost */
+	uint64_t packets_lost;
 	struct ctf_stream_packet_timestamp prev;
 	struct ctf_stream_packet_timestamp current;
 	char path[PATH_MAX];			/* Path to stream. '\0' for mmap traces */
@@ -182,7 +184,12 @@ struct ctf_tracer_env {
 	char sysname[TRACER_ENV_LEN];
 	char release[TRACER_ENV_LEN];
 	char version[TRACER_ENV_LEN];
+	char tracer_name[TRACER_ENV_LEN];
 };
+
+#ifdef ENABLE_DEBUG_INFO
+struct debug_info;
+#endif
 
 struct ctf_trace {
 	struct bt_trace_descriptor parent;
@@ -222,6 +229,11 @@ struct ctf_trace {
 	DIR *dir;
 	int dirfd;
 	int flags;		/* open flags */
+
+#ifdef ENABLE_DEBUG_INFO
+	/* Debug information for this trace */
+	struct debug_info *debug_info;
+#endif
 };
 
 #define CTF_STREAM_SET_FIELD(ctf_stream, field)				\

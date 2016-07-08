@@ -1,28 +1,42 @@
-#                                               -*- Autoconf -*-
-# Process this file with autoconf to produce a configure script.
-
 AC_INIT([lttngtop],[0.3],[jdesfossez@efficios.com])
-AC_CONFIG_AUX_DIR([config])
-AC_CANONICAL_TARGET
-AC_CANONICAL_HOST
-AM_INIT_AUTOMAKE([foreign dist-bzip2 no-dist-gzip])
-AM_SILENT_RULES([yes])
-
-AC_CONFIG_MACRO_DIR([m4])
 
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_AUX_DIR([config])
+AC_CONFIG_MACRO_DIR([m4])
+
+AC_CANONICAL_TARGET
+AC_CANONICAL_HOST
+
+AM_INIT_AUTOMAKE([foreign dist-bzip2 no-dist-gzip])
+AM_MAINTAINER_MODE([enable])
+
+# Enable silent rules if available (Introduced in AM 1.11)
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+
+AC_ENABLE_SHARED(yes)
+AC_ENABLE_STATIC(no)
+
+# Checks for C compiler
+AC_USE_SYSTEM_EXTENSIONS
+AC_PROG_CC
+AC_PROG_CC_STDC
 
 # Checks for programs.
-AC_PROG_CC
 AC_PROG_MAKE_SET
-LT_INIT
 AC_PROG_YACC
 AC_PROG_LEX
+
+LT_INIT
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_INLINE
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
+
+AX_C___ATTRIBUTE__
+AS_IF([test "x$ax_cv___attribute__" = "xyes"],
+	[:],
+	[AC_MSG_ERROR([The compiler does not support __attribute__ extensions])])
 
 # Checks for library functions.
 AC_FUNC_MALLOC
@@ -69,12 +83,17 @@ PKG_CHECK_MODULES(GMODULE, [$pkg_modules])
 AC_SUBST(PACKAGE_LIBS)
 LIBS="$LIBS $GMODULE_LIBS"
 
+DEFAULT_INCLUDES="-include config.h"
+AC_SUBST(DEFAULT_INCLUDES)
+
 PACKAGE_CFLAGS="$GMODULE_CFLAGS -Wall -Werror=format-security"
 AC_SUBST(PACKAGE_CFLAGS)
 
 AC_CONFIG_FILES([
 	Makefile
+	lib/Makefile
 	src/Makefile
+	src/kernel-ctl/Makefile
 	doc/Makefile
 	utils/Makefile
 ])

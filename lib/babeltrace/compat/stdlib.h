@@ -1,12 +1,10 @@
-#ifndef BABELTRACE_CTF_WRITER_REF_INTERNAL_H
-#define BABELTRACE_CTF_WRITER_REF_INTERNAL_H
+#ifndef _BABELTRACE_COMPAT_STDLIB_H
+#define _BABELTRACE_COMPAT_STDLIB_H
 
 /*
- * BabelTrace - CTF Writer: Reference count
+ * babeltrace/compat/stdlib.h
  *
- * Copyright 2013 EfficiOS Inc.
- *
- * Author: Jérémie Galarneau <jeremie.galarneau@efficios.com>
+ * Copyright (C) 2015 Michael Jeanson <mjeanson@efficios.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,35 +25,36 @@
  * SOFTWARE.
  */
 
-#include <assert.h>
+#include <stdlib.h>
+#include <sys/stat.h>
 
-struct bt_ctf_ref {
-	long refcount;
-};
-
+#ifdef HAVE_MKDTEMP
 static inline
-void bt_ctf_ref_init(struct bt_ctf_ref *ref)
+char *bt_mkdtemp(char *template)
 {
-	assert(ref);
-	ref->refcount = 1;
+	return mkdtemp(template);
 }
-
+#else
 static inline
-void bt_ctf_ref_get(struct bt_ctf_ref *ref)
+char *bt_mkdtemp(char *template)
 {
-	assert(ref);
-	ref->refcount++;
-}
+	char *ret;
 
-static inline
-void bt_ctf_ref_put(struct bt_ctf_ref *ref,
-		void (*release)(struct bt_ctf_ref *))
-{
-	assert(ref);
-	assert(release);
-	if ((--ref->refcount) == 0) {
-		release(ref);
+	ret = mktemp(template);
+	if (!ret) {
+		goto end;
 	}
-}
 
-#endif /* BABELTRACE_CTF_WRITER_REF_INTERNAL_H */
+	if(mkdir(template, 0700)) {
+		ret = NULL;
+		goto end;
+	}
+
+	ret = template;
+end:
+	return ret;
+}
+#endif
+
+
+#endif /* _BABELTRACE_COMPAT_STDLIB_H */

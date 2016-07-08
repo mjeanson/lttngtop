@@ -1,6 +1,6 @@
-AM_CFLAGS = $(PACKAGE_CFLAGS) -I$(top_srcdir)/lib -DBABELTRACE_HAVE_LIBUUID -DBABELTRACE_HAVE_FMEMOPEN -DBABELTRACE_HAVE_OPEN_MEMSTREAM
+AM_CFLAGS = $(PACKAGE_CFLAGS) -I$(top_srcdir) -I$(top_srcdir)/lib -DBABELTRACE_HAVE_LIBUUID -DBABELTRACE_HAVE_FMEMOPEN -DBABELTRACE_HAVE_OPEN_MEMSTREAM
 
-lib_LTLIBRARIES = libbabeltrace-lttngtop-live.la
+pkglib_LTLIBRARIES = libbabeltrace-lttngtop-live.la
 
 libbabeltrace_lttngtop_live_la_SOURCES = \
 				      network-live.c lttng-live-comm.c
@@ -54,7 +54,20 @@ noinst_HEADERS = \
 	$(top_builddir)/lib/babeltrace/trace-collection.h \
 	$(top_builddir)/lib/babeltrace/trace-handle-internal.h \
 	$(top_builddir)/lib/babeltrace/trace-handle.h \
-	$(top_builddir)/lib/babeltrace/types.h
+	$(top_builddir)/lib/babeltrace/types.h \
+	$(top_builddir)/lib/babeltrace/bin-info.h \
+	$(top_builddir)/lib/babeltrace/compat/dirent.h \
+	$(top_builddir)/lib/babeltrace/compat/fcntl.h \
+	$(top_builddir)/lib/babeltrace/compat/mman.h \
+	$(top_builddir)/lib/babeltrace/compat/send.h \
+	$(top_builddir)/lib/babeltrace/compat/stdio.h \
+	$(top_builddir)/lib/babeltrace/compat/stdlib.h \
+	$(top_builddir)/lib/babeltrace/crc32.h \
+	$(top_builddir)/lib/babeltrace/debug-info.h \
+	$(top_builddir)/lib/babeltrace/dwarf.h \
+	$(top_builddir)/lib/babeltrace/trace-debug-info.h \
+	$(top_builddir)/lib/babeltrace/utils.h
+
 
 
 lttngtop_SOURCES = \
@@ -69,4 +82,4 @@ lttngtop_SOURCES = \
 lttngtop_LDFLAGS = -Wl,--no-as-needed
 
 lttngtop_LDADD = -lbabeltrace -lbabeltrace-ctf -llttng-ctl \
-		 -lurcu -llttng-ust-ctl $(lib_LTLIBRARIES)
+		 -lurcu -llttng-ust-ctl $(pkglib_LTLIBRARIES)

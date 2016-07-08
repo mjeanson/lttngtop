@@ -151,6 +151,14 @@ extern int babeltrace_verbose, babeltrace_debug;
 # endif
 #endif
 
+#ifndef min
+#define min(a, b)	(((a) < (b)) ? (a) : (b))
+#endif
+
+#ifndef max
+#define max(a, b)	(((a) > (b)) ? (a) : (b))
+#endif
+
 /*
  * BT_HIDDEN: set the hidden attribute for internal functions
  */
@@ -191,10 +199,13 @@ extern int opt_all_field_names,
 	opt_clock_seconds,
 	opt_clock_date,
 	opt_clock_gmt,
-	opt_clock_force_correlate;
+	opt_clock_force_correlate,
+	opt_debug_info_full_path;
 
 extern uint64_t opt_clock_offset;
 extern uint64_t opt_clock_offset_ns;
 extern int babeltrace_ctf_console_output;
+extern char *opt_debug_info_dir;
+extern char *opt_debug_info_target_prefix;
 
 #endif

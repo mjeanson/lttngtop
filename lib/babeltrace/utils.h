@@ -1,10 +1,10 @@
-#ifndef BABELTRACE_CTF_WRITER_REF_INTERNAL_H
-#define BABELTRACE_CTF_WRITER_REF_INTERNAL_H
+#ifndef _BABELTRACE_DEBUG_INFO_UTILS_H
+#define _BABELTRACE_DEBUG_INFO_UTILS_H
 
 /*
- * BabelTrace - CTF Writer: Reference count
+ * Babeltrace - Debug Info Utilities
  *
- * Copyright 2013 EfficiOS Inc.
+ * Copyright 2016 Jérémie Galarneau <jeremie.galarneau@efficios.com>
  *
  * Author: Jérémie Galarneau <jeremie.galarneau@efficios.com>
  *
@@ -27,35 +27,13 @@
  * SOFTWARE.
  */
 
-#include <assert.h>
+#include <babeltrace/babeltrace-internal.h>
 
-struct bt_ctf_ref {
-	long refcount;
-};
+/*
+ * Return the location of a path's file (the last element of the path).
+ * Returns the original path on error.
+ */
+BT_HIDDEN
+const char *get_filename_from_path(const char *path);
 
-static inline
-void bt_ctf_ref_init(struct bt_ctf_ref *ref)
-{
-	assert(ref);
-	ref->refcount = 1;
-}
-
-static inline
-void bt_ctf_ref_get(struct bt_ctf_ref *ref)
-{
-	assert(ref);
-	ref->refcount++;
-}
-
-static inline
-void bt_ctf_ref_put(struct bt_ctf_ref *ref,
-		void (*release)(struct bt_ctf_ref *))
-{
-	assert(ref);
-	assert(release);
-	if ((--ref->refcount) == 0) {
-		release(ref);
-	}
-}
-
-#endif /* BABELTRACE_CTF_WRITER_REF_INTERNAL_H */
+#endif	/* _BABELTRACE_DEBUG_INFO_UTILS_H */

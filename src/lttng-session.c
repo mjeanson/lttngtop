@@ -1,4 +1,3 @@
-#define _GNU_SOURCE         /* See feature_test_macros(7) */
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>

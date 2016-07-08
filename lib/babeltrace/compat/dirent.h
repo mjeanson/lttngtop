@@ -1,12 +1,10 @@
-#ifndef BABELTRACE_CTF_WRITER_REF_INTERNAL_H
-#define BABELTRACE_CTF_WRITER_REF_INTERNAL_H
+#ifndef _BABELTRACE_COMPAT_DIRENT_H
+#define _BABELTRACE_COMPAT_DIRENT_H
 
 /*
- * BabelTrace - CTF Writer: Reference count
+ * babeltrace/compat/dirent.h
  *
- * Copyright 2013 EfficiOS Inc.
- *
- * Author: Jérémie Galarneau <jeremie.galarneau@efficios.com>
+ * Copyright (C) 2015 Michael Jeanson <mjeanson@efficios.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,35 +25,25 @@
  * SOFTWARE.
  */
 
-#include <assert.h>
+#include <dirent.h>
 
-struct bt_ctf_ref {
-	long refcount;
-};
-
+#ifdef HAVE_DIRFD
 static inline
-void bt_ctf_ref_init(struct bt_ctf_ref *ref)
-{
-	assert(ref);
-	ref->refcount = 1;
+int bt_dirfd(DIR *dir) {
+	return dirfd(dir);
 }
-
+#else
+# ifndef __XOPEN_OR_POSIX
 static inline
-void bt_ctf_ref_get(struct bt_ctf_ref *ref)
-{
-	assert(ref);
-	ref->refcount++;
+int bt_dirfd(DIR *dir) {
+	return dir->dd_fd;
 }
-
+# else
 static inline
-void bt_ctf_ref_put(struct bt_ctf_ref *ref,
-		void (*release)(struct bt_ctf_ref *))
-{
-	assert(ref);
-	assert(release);
-	if ((--ref->refcount) == 0) {
-		release(ref);
-	}
+int bt_dirfd(DIR *dir) {
+	return dir->d_fd;
 }
+# endif
+#endif
 
-#endif /* BABELTRACE_CTF_WRITER_REF_INTERNAL_H */
+#endif /* _BABELTRACE_COMPAT_DIRENT_H */
